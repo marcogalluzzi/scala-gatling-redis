@@ -29,7 +29,7 @@ The Gatling simulation is set up in such a way that it only performs requests if
 
 ## Project structure
 
-The main simulation file is located in the `src/main/test/` folder, while the remaining files of the project are in the `src/main/` folder.
+The main simulation file `MobileUsersSimulation.scala` is located in the `src/test/` folder, while the remaining files of the project are in the `src/main/` folder.
 
 ## How to run?
 
