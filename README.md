@@ -27,6 +27,10 @@ From the Gatling application, for each user we are simulating we use the info fr
 
 The Gatling simulation is set up in such a way that it only performs requests if it can take a value from the Redis list.
 
+## Project structure
+
+The main simulation file is located in the `src/main/test/` folder, while the remaining files of the project are in the `src/main/` folder.
+
 ## How to run?
 
 Just run the `sbt` command `gatling:test`.
