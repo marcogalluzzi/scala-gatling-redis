@@ -16,16 +16,15 @@ class MobileUserSimulation extends Simulation {
     .headers(config.http.headers)
 
   val theScenarioBuilder = scenario("PushNotification")
-    .exec(session => {
-      val item = RedisQueue.pop
-
-      if (item.isDefined)
-        session
-          .set(MESSAGE_ID, item.get.messageId)
-          .set(IMAGE_NAME, item.get.imageName)
-          .set(ENCODED_USER_ID, item.get.encodedUserId)
-      else session
-    })
+    .exec(session =>
+      RedisQueue.pop match {
+        case None => session
+        case Some(item) => session
+          .set(MESSAGE_ID, item.messageId)
+          .set(IMAGE_NAME, item.imageName)
+          .set(ENCODED_USER_ID, item.encodedUserId)
+      }
+    )
     .doIf("${"+MESSAGE_ID+".exists()}") {
       exec(
         ActionReceiveNotification.request,

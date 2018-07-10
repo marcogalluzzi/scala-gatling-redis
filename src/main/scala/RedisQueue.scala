@@ -13,18 +13,12 @@ object RedisQueue {
   case class RedisItem(messageId: Long, imageName: String, encodedUserId: String)
 
   def pop: Option[RedisItem] = {
-    val listValue = redisClients.withClient {
-      client => {
-        client.lpop(config.redis.listKey)
+    redisClients.withClient(_.lpop(config.redis.listKey)) match {
+      case None => None
+      case Some(listValue) => decode[RedisItem](listValue) match {
+        case Left(_) => None
+        case Right(item) => Option(item)
       }
     }
-
-    if (listValue.isDefined) {
-      val eitherErrorOrItem = decode[RedisItem](listValue.get)
-      if (eitherErrorOrItem.isRight) {
-        return Option(eitherErrorOrItem.right.get)
-      }
-    }
-    Option.empty
   }
 }
